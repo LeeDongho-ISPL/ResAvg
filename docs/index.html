@@ -286,7 +286,7 @@ footer p{margin:0 0 4px}
         <span class="tag r" id="tagR">+ Ours · 34.10 dB · 11.29 MB</span>
       </div>
       <div class="vctrl" id="cmpCtrl"><button type="button" class="vplay" aria-label="Pause"></button><input type="range" class="vseek" min="0" max="1000" step="1" value="0" aria-label="Seek"><span class="vtime">0:00 / 0:00</span></div>
-      <p class="hint">PSNR is measured on the test views of each scene. Size is the full bitstream in MB.</p>
+      <p class="hint">PSNR is measured on the test views of each scene. Size is the full bitstream in MB. <i>train</i> plays at half the selected speed because its camera moves about twice as far per frame. Press Space on the video to pause.</p>
       <div class="zoom">
         <h3>Zoom-in comparison</h3>
         <p class="sub">Surfaces lit by or reflecting sunlight, cropped from the flight path, for the method selected above.</p>
@@ -327,6 +327,8 @@ const ANONYMOUS = false;
 const DRAFT = true;
 /* Playback speed for every video on the page (1 = original). */
 let SPEED = 0.7;
+/* Extra slow-down for scenes whose camera path moves faster (train covers about twice the distance per frame). */
+const SCENE_RATE = {train: 0.5};
 
 (function(){
   const $=id=>document.getElementById(id);
@@ -405,7 +407,8 @@ let SPEED = 0.7;
     $('tagR').textContent=st?`+ Ours · ${f2(st[2])} dB · ${f2(st[3])} MB`:'+ Ours';
     vL.src=`${b}.mp4`; vR.src=`${b}_ours.mp4`;
   }
-  function ready(side){ok[side]=true; if(ok.L&&ok.R){vL.hidden=vR.hidden=false;$('splitPh').hidden=true;vL.currentTime=0;vR.currentTime=0;[vL,vR].forEach(x=>{x.defaultPlaybackRate=SPEED;x.playbackRate=SPEED;});vL.play().catch(()=>{});vR.play().catch(()=>{});}}
+  function setCmpRate(){const r=SPEED*(SCENE_RATE[state.scene]||1);[vL,vR].forEach(x=>{x.defaultPlaybackRate=r;x.playbackRate=r;});}
+  function ready(side){ok[side]=true; if(ok.L&&ok.R){vL.hidden=vR.hidden=false;$('splitPh').hidden=true;vL.currentTime=0;vR.currentTime=0;setCmpRate();vL.play().catch(()=>{});vR.play().catch(()=>{});}}
   vL.addEventListener('loadeddata',()=>ready('L')); vR.addEventListener('loadeddata',()=>ready('R'));
   vL.addEventListener('timeupdate',()=>{if(!vL.paused&&Math.abs(vR.currentTime-vL.currentTime)>0.08) vR.currentTime=vL.currentTime;});
   attachCtrl($('cmpCtrl'),[vL,vR]);
@@ -419,7 +422,8 @@ let SPEED = 0.7;
   sb.forEach(b=>b.addEventListener('click',()=>{
     sb.forEach(x=>x.setAttribute('aria-pressed',x===b));
     SPEED=Number(b.dataset.v);
-    document.querySelectorAll('video').forEach(v=>{v.defaultPlaybackRate=SPEED;v.playbackRate=SPEED;});
+    document.querySelectorAll('video').forEach(v=>{if(v!==vL&&v!==vR){v.defaultPlaybackRate=SPEED;v.playbackRate=SPEED;}});
+    setCmpRate();
   }));
 
   let t=.5;
@@ -429,7 +433,7 @@ let SPEED = 0.7;
   cmp.addEventListener('pointerdown',e=>{drag=true;cmp.setPointerCapture(e.pointerId);fromX(e.clientX);});
   cmp.addEventListener('pointermove',e=>{if(drag)fromX(e.clientX);});
   cmp.addEventListener('pointerup',()=>drag=false);
-  cmp.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();setT(t+(e.key==='ArrowRight'?.05:-.05));}});
+  cmp.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();setT(t+(e.key==='ArrowRight'?.05:-.05));}else if(e.key===' '){e.preventDefault();$('cmpCtrl').querySelector('.vplay').click();}});
 
   /* BibTeX copy */
   const cb=$('copyBib');
