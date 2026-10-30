@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>body{margin:0}</style>
+<title>ResAvg Project Page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@500;600;700;800&family=Noto+Sans:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: Nerfies-style centered column on white; full-width teaser video; tinted band for the video comparison section */
+:root{
+  color-scheme:light;
+  --bg:#ffffff; --band:#f5f7fa; --ink:#1a1d23; --muted:#5f6673; --line:#e3e6eb;
+  --navy:#1b3a5c; --ours:#c2541d; --ours-soft:#fbeee6; --slot:#eef1f5;
+  --f-display:"Figtree","Google Sans","Segoe UI",system-ui,sans-serif;
+  --f-body:"Noto Sans","Segoe UI","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --col:880px; --wide:1080px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16.5px;line-height:1.7;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--navy);text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--navy);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.2}
+img{display:block;max-width:100%;height:auto}
+.col{max-width:var(--col);margin:0 auto}
+.wide{max-width:var(--wide);margin:0 auto}
+
+.draft{font-family:var(--f-display);font-size:13px;color:var(--muted);text-align:center;padding-block:9px;border-bottom:1px dashed var(--line)}
+.draft b{color:var(--ours)}
+
+/* Header */
+header{text-align:center;padding-block:56px 28px}
+.mark{font-size:clamp(46px,7vw,72px);font-weight:800;letter-spacing:-.03em;color:var(--navy)}
+.mark span{color:var(--ours)}
+.title{font-size:clamp(22px,3vw,32px);font-weight:600;letter-spacing:-.01em;max-width:30em;margin:10px auto 0;color:var(--ink)}
+.venue{font-family:var(--f-display);font-weight:600;font-size:16px;color:var(--muted);margin:14px 0 0}
+.authors{margin:22px auto 0;font-size:17px;display:grid;gap:4px}
+.authors ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 22px}
+.authors li{white-space:nowrap}
+.authors a{text-decoration:none}
+.authors a:hover{text-decoration:underline}
+.authors sup{font-size:.7em;color:var(--muted);margin-left:1px}
+.affil{margin:8px 0 0;font-size:15.5px;color:var(--ink)}
+.affil span{margin:0 10px;white-space:nowrap}
+.note{font-size:13.5px;color:var(--muted);margin:4px 0 0}
+.links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:22px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:999px;background:#2b2f36;color:#fff;
+  font-family:var(--f-display);font-weight:600;font-size:15px;text-decoration:none;border:0;cursor:pointer}
+.btn:hover{background:var(--navy)}
+.btn svg{width:17px;height:17px;flex:none}
+.btn[aria-disabled="true"]{background:#c9ced6;pointer-events:none}
+.btn small{font-weight:500;font-size:12px;opacity:.9}
+
+/* Video slot (placeholder until the file exists) */
+.vslot{position:relative;aspect-ratio:16/9;max-width:100%;background:var(--slot);border-radius:10px;overflow:hidden}
+.vslot video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+.ph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:16px;
+  border:1.5px dashed #c5ccd6;border-radius:10px;color:var(--muted);font-family:var(--f-display);font-size:14px}
+.ph .play{width:52px;height:52px;margin:0 auto 10px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 1px 4px rgba(20,30,50,.12)}
+.ph .play svg{width:20px;height:20px;margin-left:3px;fill:var(--navy)}
+.ph b{display:block;color:var(--ink);font-size:15px}
+.ph code{font-family:var(--f-mono);font-size:12.5px;color:var(--navy)}
+.teaser{margin-top:8px}
+.teaser figcaption{text-align:center;color:var(--muted);font-size:15px;margin-top:12px}
+
+/* Tagline */
+.tagline{text-align:center;padding-block:44px 8px}
+.tagline h2{font-size:clamp(22px,2.8vw,30px);font-weight:600;letter-spacing:-.01em;max-width:28em;margin:0 auto;color:var(--ink)}
+.tagline h2 em{font-style:normal;color:var(--ours)}
+
+section{padding-block:52px 0}
+section > .col > h2, section > h2{font-size:28px;font-weight:700;text-align:center;margin-bottom:22px;letter-spacing:-.015em}
+.abstract p{text-align:justify;hyphens:auto;margin:0 0 1em}
+.abstract .lead{font-style:italic;text-align:center;color:var(--navy);font-size:17.5px;margin-bottom:1.2em}
+
+figure{margin:0}
+.fig figcaption{font-size:15px;color:var(--muted);margin:14px auto 0;max-width:var(--col)}
+.fig figcaption b{color:var(--ink)}
+.modules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:28px}
+.module{padding:18px 20px;border:1px solid var(--line);border-radius:10px}
+.module h3{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.module h3 span{display:inline-block;font-size:12px;letter-spacing:.06em;color:#fff;background:var(--navy);border-radius:4px;padding:1px 7px;margin-right:8px;vertical-align:2px}
+.module.cpa h3{color:var(--ours)}
+.module.cpa h3 span{background:var(--ours)}
+.module p{margin:0;font-size:15.5px}
+
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+.islot{aspect-ratio:16/10;max-width:100%;position:relative;background:var(--slot);border-radius:10px}
+.perf-table{container-type:inline-size}
+.islot.full{aspect-ratio:auto;height:calc((100cqw - 24px) / 2 * 10 / 16)}
+.pair .fig figcaption, .perf-table figcaption{text-align:center}
+.imgbox{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff}
+
+/* Comparison band */
+.band{background:var(--band);margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:52px 56px;margin-top:56px}
+.band h2{font-size:28px;font-weight:700;text-align:center;margin-bottom:8px}
+.band .sub{text-align:center;color:var(--muted);margin:0 auto 22px;max-width:40em}
+.tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-bottom:10px}
+.tabs .lbl{font-family:var(--f-display);font-size:13px;font-weight:600;color:var(--muted);align-self:center;margin-right:4px;min-width:56px;text-align:right}
+.tabs button{font-family:var(--f-display);font-size:14px;font-weight:600;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.cmp{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:10px;overflow:hidden;background:var(--slot);touch-action:none;user-select:none;cursor:ew-resize;margin-top:14px}
+.cmp video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cmp .right{position:absolute;inset:0;clip-path:inset(0 0 0 50%)}
+.cmp .bar{position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.08);pointer-events:none;z-index:3}
+.cmp .bar::after{content:"⟷";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;
+  background:#fff;color:var(--navy);display:grid;place-items:center;font-size:15px;box-shadow:0 1px 6px rgba(0,0,0,.2)}
+.cmp .tag{position:absolute;bottom:12px;z-index:3;font-family:var(--f-display);font-size:13px;font-weight:600;padding:4px 10px;border-radius:6px;background:rgba(255,255,255,.92);color:var(--ink);font-variant-numeric:tabular-nums}
+.cmp .tag.l{left:12px}.cmp .tag.r{right:12px;color:var(--ours)}
+.cmp .ph{z-index:2;background:var(--slot)}
+.cmp .split-ph{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;z-index:1}
+.cmp .split-ph div{display:grid;place-items:center;font-family:var(--f-mono);font-size:12px;color:var(--muted);padding:12px;text-align:center}
+.cmp .split-ph div + div{background:var(--ours-soft);color:var(--ours)}
+.hint{text-align:center;color:var(--muted);font-size:14px;margin-top:12px}
+
+/* BibTeX */
+.bib{position:relative}
+.bib pre{margin:0;background:var(--band);border-radius:10px;padding:20px 22px;overflow-x:auto;font-family:var(--f-mono);font-size:13.5px;line-height:1.6}
+.bib .copy{position:absolute;top:10px;right:10px;padding:5px 12px;font-size:13px}
+footer{margin-top:64px;border-top:1px solid var(--line);padding-block:24px 40px;text-align:center;font-size:13.5px;color:var(--muted)}
+footer p{margin:0 0 4px}
+
+@media (max-width:760px){
+  .modules,.pair{grid-template-columns:minmax(0,1fr)}
+  .tabs .lbl{min-width:0;width:100%;text-align:center}
+  .vslot,.cmp{aspect-ratio:4/3}
+  .islot.full{height:auto;aspect-ratio:16/10}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="draft" id="draftBar"><b>Design preview</b> · Text, figures and videos are placeholders.</div>
+
+<header class="wide">
+  <h1 class="mark">Res<span>Avg</span></h1>
+  <p class="title">Residual Directional Shading and Cumulative Parameter Averaging for Anchor-Based Gaussian Splatting Compression</p>
+  <p class="venue" id="venue">Conference 20XX</p>
+
+  <div class="authors" id="authors">
+    <ul>
+      <li><a href="#">Yooho Lee</a><sup>1*</sup></li>
+      <li><a href="#">Dongho Lee</a><sup>1*</sup></li>
+      <li><a href="#">Hyeonbin Park</a><sup>1</sup></li>
+    </ul>
+    <ul>
+      <li><a href="#">Won-Sik Cheong</a><sup>2</sup></li>
+      <li><a href="#">Hyon-Gon Choo</a><sup>2</sup></li>
+      <li><a href="#">Dongsan Jun</a><sup>1†</sup></li>
+    </ul>
+  </div>
+  <p class="affil" id="affil"><span><sup>1</sup>Dong-A University</span><span><sup>2</sup>ETRI</span></p>
+  <p class="note" id="note">* Equal contribution &nbsp;·&nbsp; † Corresponding author</p>
+
+  <nav class="links" id="links" aria-label="Paper resources">
+    <a class="btn" href="static/pdfs/ResAvg_paper.pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/></svg>Paper</a>
+    <a class="btn" aria-disabled="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 5l14 14M19 5L5 19"/></svg>arXiv <small>soon</small></a>
+    <a class="btn" aria-disabled="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.6.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.2-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.5.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg>Code <small>soon</small></a>
+    <a class="btn" href="#video"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Video</a>
+  </nav>
+</header>
+
+<div class="wide teaser">
+  <figure>
+    <div class="vslot" data-src="static/videos/teaser.mp4">
+      <div class="ph"><div><div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><b>Teaser video</b><code>static/videos/teaser.mp4</code><br>1920×1080 · muted loop</div></div>
+    </div>
+    <figcaption>Teaser caption: one line on what the video shows.</figcaption>
+  </figure>
+</div>
+
+<div class="tagline col">
+  <h2>One-sentence summary of the method goes here, with the <em>key idea</em> highlighted in the accent color.</h2>
+</div>
+
+<main>
+  <section class="col abstract" id="abstract">
+    <h2>Abstract</h2>
+    <p class="lead">Headline result in one line goes here.</p>
+    <p>Abstract paragraph one. This block shows how a full abstract reads at the final column width. Replace it with the problem statement, the gap in previous work, and the reason the gap matters. A typical abstract for a vision conference runs about one hundred and fifty to two hundred and fifty words across one or two paragraphs.</p>
+    <p>Abstract paragraph two. State what the method does, name its components, and summarize the experiments: the datasets, the baselines, and the main gain. Keep the wording identical to the abstract in the paper PDF.</p>
+  </section>
+
+  <section id="method">
+    <div class="col"><h2>Method</h2></div>
+    <figure class="wide fig">
+      <div class="islot" style="aspect-ratio:12/5"><div class="ph"><div><b>Framework figure</b><code>static/images/framework.png</code><br>exported at 2400 px wide</div></div></div>
+      <figcaption><b>Overall framework.</b> Figure caption copied from the paper.</figcaption>
+    </figure>
+    <div class="col modules">
+      <div class="module"><h3><span>A</span>Module A</h3>
+        <p>One or two sentences on what the first component does and what it changes in the pipeline.</p></div>
+      <div class="module cpa"><h3><span>B</span>Module B</h3>
+        <p>One or two sentences on what the second component does and what it changes in the pipeline.</p></div>
+    </div>
+  </section>
+
+  <section id="performance">
+    <div class="col"><h2>Main Performance</h2></div>
+    <div class="wide pair">
+      <figure class="fig">
+        <div class="islot"><div class="ph"><div><b>Result figure A</b><code>static/images/result_a.png</code><br>first result figure, 16:10</div></div></div>
+        <figcaption><b>Figure A.</b> Caption for the first result figure.</figcaption>
+      </figure>
+      <figure class="fig">
+        <div class="islot"><div class="ph"><div><b>Result figure B</b><code>static/images/result_b.png</code><br>second result figure, 16:10</div></div></div>
+        <figcaption><b>Figure B.</b> Caption for the second result figure.</figcaption>
+      </figure>
+    </div>
+    <figure class="wide fig perf-table" style="margin-top:28px">
+      <div class="islot full"><div class="ph"><div><b>Quantitative table</b><code>static/images/main_table.png</code><br>Table 1 of the paper, exported at 2400 px wide</div></div></div>
+      <figcaption><b>Table.</b> Main quantitative table of the paper.</figcaption>
+    </figure>
+  </section>
+
+  <div class="band" id="video">
+    <div class="wide">
+      <h2>Visual Comparisons</h2>
+      <p class="sub">Drag the divider. Left is the baseline, right is the proposed method.</p>
+      <div class="tabs" id="codecTabs" role="group" aria-label="Method">
+        <span class="lbl">Method</span>
+        <button type="button" data-v="m1" aria-pressed="true">Baseline 1</button>
+        <button type="button" data-v="m2" aria-pressed="false">Baseline 2</button>
+        <button type="button" data-v="m3" aria-pressed="false">Baseline 3</button>
+      </div>
+      <div class="tabs" id="sceneTabs" role="group" aria-label="Scene">
+        <span class="lbl">Scene</span>
+        <button type="button" data-v="scene1" aria-pressed="true">Scene 1</button>
+        <button type="button" data-v="scene2" aria-pressed="false">Scene 2</button>
+        <button type="button" data-v="scene3" aria-pressed="false">Scene 3</button>
+        <button type="button" data-v="scene4" aria-pressed="false">Scene 4</button>
+      </div>
+      <div class="cmp" id="cmp" tabindex="0" aria-label="Comparison video, use left and right arrow keys to move the divider">
+        <div class="split-ph" id="splitPh"><div id="phL"></div><div id="phR"></div></div>
+        <video id="vL" muted loop playsinline preload="metadata"></video>
+        <div class="right" id="right"><video id="vR" muted loop playsinline preload="metadata"></video></div>
+        <div class="bar" id="bar"></div>
+        <span class="tag l" id="tagL">Baseline 1 · xx.xx dB</span>
+        <span class="tag r" id="tagR">Ours · xx.xx dB</span>
+      </div>
+      <p class="hint">Videos load from <code>static/videos/&lt;scene&gt;_&lt;method&gt;.mp4</code> and <code>&lt;scene&gt;_&lt;method&gt;_ours.mp4</code>.</p>
+    </div>
+  </div>
+
+  <section class="col" id="bibtex">
+    <h2>BibTeX</h2>
+    <div class="bib">
+      <pre id="bibText">@article{lee2026resavg,
+  title   = {ResAvg: Residual Directional Shading and Cumulative
+             Parameter Averaging for Anchor-Based Gaussian
+             Splatting Compression},
+  author  = {Lee, Yooho and Lee, Dongho and Park, Hyeonbin and
+             Cheong, Won-Sik and Choo, Hyon-Gon and Jun, Dongsan},
+  journal = {arXiv preprint arXiv:XXXX.XXXXX},
+  year    = {2026}
+}</pre>
+      <button class="btn copy" type="button" id="copyBib">Copy</button>
+    </div>
+  </section>
+</main>
+
+<footer class="col">
+  <p id="ack">Acknowledgments and grant numbers go here after acceptance.</p>
+  <p>This page follows the layout of the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> template, licensed under CC BY-SA 4.0.</p>
+</footer>
+
+<script>
+/* ANONYMOUS=true → copy for the CVPR supplementary zip (no names, affiliations, links, BibTeX). */
+const ANONYMOUS = false;
+const DRAFT = true;
+
+(function(){
+  const $=id=>document.getElementById(id);
+  if(!DRAFT) $('draftBar').hidden=true;
+  if(ANONYMOUS){
+    $('authors').innerHTML='<ul><li>Anonymous submission</li></ul>';
+    ['affil','note','links','bibtex','ack','draftBar'].forEach(i=>$(i).hidden=true);
+    $('venue').textContent='Supplementary material';
+  }
+
+  /* Teaser and other single video slots: play the file if it exists, otherwise keep the placeholder. */
+  document.querySelectorAll('.vslot[data-src]').forEach(slot=>{
+    const v=document.createElement('video');
+    Object.assign(v,{muted:true,loop:true,autoplay:true,playsInline:true});
+    v.hidden=true;
+    v.addEventListener('loadeddata',()=>{v.hidden=false;slot.querySelector('.ph').hidden=true;});
+    v.src=slot.dataset.src; slot.prepend(v);
+  });
+
+  /* Comparison: two synced videos with a draggable split. */
+  const NAMES={m1:'Baseline 1',m2:'Baseline 2',m3:'Baseline 3'};
+  const state={codec:'m1',scene:'scene1'};
+  const vL=$('vL'),vR=$('vR'),cmp=$('cmp'),right=$('right'),bar=$('bar');
+  let ok={L:false,R:false};
+  function load(){
+    const b=`static/videos/${state.scene}_${state.codec}`;
+    ok={L:false,R:false};
+    vL.hidden=vR.hidden=true; $('splitPh').hidden=false;
+    $('phL').textContent=`${b}.mp4`; $('phR').textContent=`${b}_ours.mp4`;
+    $('tagL').textContent=`${NAMES[state.codec]} · xx.xx dB`;
+    $('tagR').textContent=`Ours · xx.xx dB`;
+    vL.src=`${b}.mp4`; vR.src=`${b}_ours.mp4`;
+  }
+  function ready(side){ok[side]=true; if(ok.L&&ok.R){vL.hidden=vR.hidden=false;$('splitPh').hidden=true;vL.currentTime=0;vR.currentTime=0;vL.play().catch(()=>{});vR.play().catch(()=>{});}}
+  vL.addEventListener('loadeddata',()=>ready('L')); vR.addEventListener('loadeddata',()=>ready('R'));
+  vL.addEventListener('timeupdate',()=>{if(Math.abs(vR.currentTime-vL.currentTime)>0.08) vR.currentTime=vL.currentTime;});
+
+  function bindTabs(id,key){
+    const bs=[...$(id).querySelectorAll('button')];
+    bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.setAttribute('aria-pressed',x===b));state[key]=b.dataset.v;load();}));
+  }
+  bindTabs('codecTabs','codec'); bindTabs('sceneTabs','scene'); load();
+
+  let t=.5;
+  function setT(v){t=Math.min(.98,Math.max(.02,v));right.style.clipPath=`inset(0 0 0 ${t*100}%)`;bar.style.left=`${t*100}%`;}
+  function fromX(x){const r=cmp.getBoundingClientRect();setT((x-r.left)/r.width);}
+  let drag=false;
+  cmp.addEventListener('pointerdown',e=>{drag=true;cmp.setPointerCapture(e.pointerId);fromX(e.clientX);});
+  cmp.addEventListener('pointermove',e=>{if(drag)fromX(e.clientX);});
+  cmp.addEventListener('pointerup',()=>drag=false);
+  cmp.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();setT(t+(e.key==='ArrowRight'?.05:-.05));}});
+
+  /* BibTeX copy */
+  const cb=$('copyBib');
+  cb.addEventListener('click',()=>{
+    const done=()=>{cb.textContent='Copied';setTimeout(()=>cb.textContent='Copy',1600);};
+    const fallback=()=>{const r=document.createRange();r.selectNodeContents($('bibText'));const s=getSelection();s.removeAllRanges();s.addRange(r);cb.textContent='Selected';};
+    try{navigator.clipboard.writeText($('bibText').textContent).then(done,fallback);}catch(e){fallback();}
+  });
+})();
+</script>
+
+</body>
+</html>
