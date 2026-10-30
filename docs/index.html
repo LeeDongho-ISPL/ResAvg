@@ -246,7 +246,14 @@ footer p{margin:0 0 4px}
           <button type="button" data-v="bonsai" aria-pressed="true">bonsai</button>
           <button type="button" data-v="kitchen" aria-pressed="false">kitchen</button>
           <button type="button" data-v="train" aria-pressed="false">train</button>
-          <button type="button" data-v="playroom" aria-pressed="false">playroom</button>
+        </div>
+      </div>
+      <div class="tabs" id="speedTabs" role="group" aria-label="Playback speed">
+        <span class="lbl">Speed</span>
+        <div class="opts">
+          <button type="button" data-v="0.5" aria-pressed="false">0.5×</button>
+          <button type="button" data-v="0.7" aria-pressed="true">0.7×</button>
+          <button type="button" data-v="1" aria-pressed="false">1×</button>
         </div>
       </div>
       </div>
@@ -288,6 +295,8 @@ footer p{margin:0 0 4px}
 /* ANONYMOUS=true → copy for the CVPR supplementary zip (no names, affiliations, links, BibTeX). */
 const ANONYMOUS = false;
 const DRAFT = true;
+/* Playback speed for every video on the page (1 = original). */
+let SPEED = 0.7;
 
 (function(){
   const $=id=>document.getElementById(id);
@@ -303,14 +312,14 @@ const DRAFT = true;
     const v=document.createElement('video');
     Object.assign(v,{muted:true,loop:true,autoplay:true,playsInline:true});
     v.hidden=true;
-    v.addEventListener('loadeddata',()=>{v.hidden=false;slot.querySelector('.ph').hidden=true;});
+    v.addEventListener('loadeddata',()=>{v.defaultPlaybackRate=SPEED;v.playbackRate=SPEED;v.hidden=false;slot.querySelector('.ph').hidden=true;});
     v.src=slot.dataset.src; slot.prepend(v);
   });
 
   /* Comparison: two synced videos with a draggable split. */
   const NAMES={hacpp:'HAC++',hac:'HAC',pcgs:'PCGS'};
   /* [base PSNR, base MB, ours PSNR, ours MB], high rate (PCGS: highest level) */
-  const STATS={"hacpp": {"bonsai": [33.14, 11.21, 34.1, 11.29], "kitchen": [31.74, 11.45, 32.48, 11.69], "train": [22.51, 8.92, 23.03, 9.39], "playroom": [30.72, 5.45, 31.26, 5.48]}, "hac": {"bonsai": [33.1, 14.93, 33.94, 14.77], "kitchen": [31.8, 14.16, 32.46, 13.92], "train": [22.72, 11.31, 23.24, 11.51], "playroom": [30.86, 6.13, 31.23, 6.04]}, "pcgs": {"bonsai": [33.08, 16.58, 33.92, 16.63], "kitchen": [31.71, 16.1, 32.29, 16.21], "train": [22.41, 8.89, 22.97, 8.72], "playroom": [30.84, 4.9, 31.02, 4.79]}};
+  const STATS={"hacpp": {"bonsai": [33.14, 11.21, 34.1, 11.29], "kitchen": [31.74, 11.45, 32.48, 11.69], "train": [22.51, 8.92, 23.03, 9.39]}, "hac": {"bonsai": [33.1, 14.93, 33.94, 14.77], "kitchen": [31.8, 14.16, 32.46, 13.92], "train": [22.72, 11.31, 23.24, 11.51]}, "pcgs": {"bonsai": [33.08, 16.58, 33.92, 16.63], "kitchen": [31.71, 16.1, 32.29, 16.21], "train": [22.41, 8.89, 22.97, 8.72]}};
   const f2=x=>Number(x).toFixed(2);
   const state={codec:'hacpp',scene:'bonsai'};
   const vL=$('vL'),vR=$('vR'),cmp=$('cmp'),right=$('right'),bar=$('bar');
@@ -325,7 +334,7 @@ const DRAFT = true;
     $('tagR').textContent=st?`+ Ours · ${f2(st[2])} dB · ${f2(st[3])} MB`:'+ Ours';
     vL.src=`${b}.mp4`; vR.src=`${b}_ours.mp4`;
   }
-  function ready(side){ok[side]=true; if(ok.L&&ok.R){vL.hidden=vR.hidden=false;$('splitPh').hidden=true;vL.currentTime=0;vR.currentTime=0;vL.play().catch(()=>{});vR.play().catch(()=>{});}}
+  function ready(side){ok[side]=true; if(ok.L&&ok.R){vL.hidden=vR.hidden=false;$('splitPh').hidden=true;vL.currentTime=0;vR.currentTime=0;[vL,vR].forEach(x=>{x.defaultPlaybackRate=SPEED;x.playbackRate=SPEED;});vL.play().catch(()=>{});vR.play().catch(()=>{});}}
   vL.addEventListener('loadeddata',()=>ready('L')); vR.addEventListener('loadeddata',()=>ready('R'));
   vL.addEventListener('timeupdate',()=>{if(Math.abs(vR.currentTime-vL.currentTime)>0.08) vR.currentTime=vL.currentTime;});
 
@@ -334,6 +343,12 @@ const DRAFT = true;
     bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.setAttribute('aria-pressed',x===b));state[key]=b.dataset.v;load();}));
   }
   bindTabs('codecTabs','codec'); bindTabs('sceneTabs','scene'); load();
+  const sb=[...$('speedTabs').querySelectorAll('button')];
+  sb.forEach(b=>b.addEventListener('click',()=>{
+    sb.forEach(x=>x.setAttribute('aria-pressed',x===b));
+    SPEED=Number(b.dataset.v);
+    document.querySelectorAll('video').forEach(v=>{v.defaultPlaybackRate=SPEED;v.playbackRate=SPEED;});
+  }));
 
   let t=.5;
   function setT(v){t=Math.min(.98,Math.max(.02,v));right.style.clipPath=`inset(0 0 0 ${t*100}%)`;bar.style.left=`${t*100}%`;}
