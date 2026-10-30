@@ -59,6 +59,9 @@ header{text-align:center;padding-block:56px 28px}
 
 /* Video slot (placeholder until the file exists) */
 .vslot{position:relative;aspect-ratio:16/9;max-width:100%;background:var(--slot);border-radius:10px;overflow:hidden}
+.vslot.pair{aspect-ratio:1280/638}
+.vslot .vlab{position:absolute;top:10px;z-index:2;font-family:var(--f-display);font-size:13px;font-weight:600;padding:3px 10px;border-radius:6px;background:rgba(255,255,255,.92);color:var(--ink)}
+.vslot .vlab.l{left:10px}.vslot .vlab.r{left:calc(50% + 10px);color:var(--ours)}
 .vslot video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
 .ph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:16px;
   border:1.5px dashed #c5ccd6;border-radius:10px;color:var(--muted);font-family:var(--f-display);font-size:14px}
@@ -195,11 +198,12 @@ footer p{margin:0 0 4px}
 
 <div class="wide teaser">
   <figure>
-    <div class="vslot" data-src="static/videos/teaser.mp4">
-      <div class="ph"><div><div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><b>Teaser video</b><code>static/videos/teaser.mp4</code><br>1280×852 · muted loop</div></div>
+    <div class="vslot pair" data-src="static/videos/teaser.mp4">
+      <span class="vlab l">HAC++</span><span class="vlab r">HAC++ + Ours</span>
+      <div class="ph"><div><div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><b>Teaser video</b><code>static/videos/teaser.mp4</code><br>1280×638 · muted loop</div></div>
     </div>
     <div class="vctrl" id="teaserCtrl" hidden><button type="button" class="vplay" aria-label="Pause"></button><input type="range" class="vseek" min="0" max="1000" step="1" value="0" aria-label="Seek"><span class="vtime">0:00 / 0:00</span></div>
-    <figcaption>HAC++ (left) and HAC++ with ResAvg (right) on <i>bonsai</i> at the high rate.</figcaption>
+    <figcaption>Center crop of the <i>bonsai</i> fly-through at the high rate. Left: HAC++. Right: HAC++ with ResAvg.</figcaption>
   </figure>
 </div>
 
@@ -289,11 +293,11 @@ footer p{margin:0 0 4px}
       <p class="hint">PSNR is measured on the test views of each scene. Size is the full bitstream in MB. <i>train</i> plays at half the selected speed because its camera moves about twice as far per frame. Press Space on the video to pause.</p>
       <div class="zoom">
         <h3>Zoom-in comparison</h3>
-        <p class="sub">Surfaces lit by or reflecting sunlight, cropped from the flight path, for the method selected above.</p>
+        <p class="sub">Test views with ground truth, cropped around the region where all six codecs gain the most with ResAvg. PSNR is computed on each crop against the ground truth.</p>
         <div class="zoomgrid" id="zoomgrid">
-          <figure><div class="zcmp" data-scene="bonsai" tabindex="0" aria-label="bonsai zoom comparison"></div><figcaption><b>bonsai</b> · sunlit wooden floor · frame 150</figcaption></figure>
-          <figure><div class="zcmp" data-scene="kitchen" tabindex="0" aria-label="kitchen zoom comparison"></div><figcaption><b>kitchen</b> · glossy table top · frame 180</figcaption></figure>
-          <figure><div class="zcmp" data-scene="train" tabindex="0" aria-label="train zoom comparison"></div><figcaption><b>train</b> · sunlit metal panel · frame 190</figcaption></figure>
+          <figure><div class="zcmp" data-scene="bonsai" tabindex="0" aria-label="bonsai zoom comparison"></div><figcaption><b>bonsai</b> · test view 16</figcaption></figure>
+          <figure><div class="zcmp" data-scene="kitchen" tabindex="0" aria-label="kitchen zoom comparison"></div><figcaption><b>kitchen</b> · test view 4</figcaption></figure>
+          <figure><div class="zcmp" data-scene="train" tabindex="0" aria-label="train zoom comparison"></div><figcaption><b>train</b> · test view 27</figcaption></figure>
         </div>
       </div>
     </div>
@@ -391,10 +395,12 @@ const SCENE_RATE = {train: 0.5};
     el.addEventListener('pointermove',e=>{if(dz)fx(e.clientX);});
     el.addEventListener('pointerup',()=>dz=false);
     el.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();set(zt+(e.key==='ArrowRight'?.05:-.05));}});
-    return {el,iL,iR,tag:el.querySelector('.tag.l')};
+    return {el,iL,iR,tag:el.querySelector('.tag.l'),tagR:el.querySelector('.tag.r')};
   });
+  /* crop PSNR against ground truth: [base, ours] */
+  const ZPSNR={"bonsai":{"hacpp":[26.82,29.77],"hac":[26.85,29.45],"pcgs":[26.48,29.65]},"kitchen":{"hacpp":[33.43,35.17],"hac":[33.1,35.48],"pcgs":[33.11,35.37]},"train":{"hacpp":[21.73,23.28],"hac":[22.18,24.7],"pcgs":[22.8,24.15]}};
   function updateZoom(){
-    zooms.forEach(z=>{const b=`static/images/zoom/${z.el.dataset.scene}_${state.codec}`;z.iL.src=`${b}.jpg`;z.iR.src=`${b}_ours.jpg`;z.tag.textContent=NAMES[state.codec];});
+    zooms.forEach(z=>{const sc=z.el.dataset.scene,b=`static/images/zoom/${sc}_${state.codec}`,q=(ZPSNR[sc]||{})[state.codec];z.iL.src=`${b}.jpg`;z.iR.src=`${b}_ours.jpg`;z.tag.textContent=q?`${NAMES[state.codec]} · ${q[0].toFixed(2)} dB`:NAMES[state.codec];z.tagR.textContent=q?`+ Ours · ${q[1].toFixed(2)} dB`:'+ Ours';});
   }
   function load(){
     updateZoom();

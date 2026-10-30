@@ -9,3 +9,6 @@ data/
 
 # raw renders and render scripts (kept local, not published)
 video/
+
+# research assets (renders, crops, analysis), kept local
+CVPR_ResAvg/
