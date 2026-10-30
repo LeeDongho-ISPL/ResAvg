@@ -144,7 +144,7 @@ footer p{margin:0 0 4px}
 <body>
 
 
-<div class="draft" id="draftBar"><b>Design preview</b> · Text, figures and videos are placeholders.</div>
+<div class="draft" id="draftBar"><b>Design preview</b> · Text and figures are placeholders.</div>
 
 <header class="wide">
   <h1 class="mark">Res<span>Avg</span></h1>
@@ -177,9 +177,9 @@ footer p{margin:0 0 4px}
 <div class="wide teaser">
   <figure>
     <div class="vslot" data-src="static/videos/teaser.mp4">
-      <div class="ph"><div><div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><b>Teaser video</b><code>static/videos/teaser.mp4</code><br>1920×1080 · muted loop</div></div>
+      <div class="ph"><div><div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><b>Teaser video</b><code>static/videos/teaser.mp4</code><br>1280×852 · muted loop</div></div>
     </div>
-    <figcaption>Teaser caption: one line on what the video shows.</figcaption>
+    <figcaption>HAC++ (left) and HAC++ with ResAvg (right) on <i>bonsai</i> at the high rate.</figcaption>
   </figure>
 </div>
 
@@ -230,23 +230,23 @@ footer p{margin:0 0 4px}
   <div class="band" id="video">
     <div class="wide">
       <h2>Visual Comparisons</h2>
-      <p class="sub">Drag the divider. Left is the baseline, right is the proposed method.</p>
+      <p class="sub">Drag the divider. Left is the base codec, right is the same codec with ResAvg, both at the high rate.</p>
       <div class="tabgrid">
       <div class="tabs" id="codecTabs" role="group" aria-label="Method">
         <span class="lbl">Method</span>
         <div class="opts">
-          <button type="button" data-v="m1" aria-pressed="true">Baseline 1</button>
-          <button type="button" data-v="m2" aria-pressed="false">Baseline 2</button>
-          <button type="button" data-v="m3" aria-pressed="false">Baseline 3</button>
+          <button type="button" data-v="hacpp" aria-pressed="true">HAC++</button>
+          <button type="button" data-v="hac" aria-pressed="false">HAC</button>
+          <button type="button" data-v="pcgs" aria-pressed="false">PCGS</button>
         </div>
       </div>
       <div class="tabs" id="sceneTabs" role="group" aria-label="Scene">
         <span class="lbl">Scene</span>
         <div class="opts">
-          <button type="button" data-v="scene1" aria-pressed="true">Scene 1</button>
-          <button type="button" data-v="scene2" aria-pressed="false">Scene 2</button>
-          <button type="button" data-v="scene3" aria-pressed="false">Scene 3</button>
-          <button type="button" data-v="scene4" aria-pressed="false">Scene 4</button>
+          <button type="button" data-v="bonsai" aria-pressed="true">bonsai</button>
+          <button type="button" data-v="kitchen" aria-pressed="false">kitchen</button>
+          <button type="button" data-v="train" aria-pressed="false">train</button>
+          <button type="button" data-v="playroom" aria-pressed="false">playroom</button>
         </div>
       </div>
       </div>
@@ -255,10 +255,10 @@ footer p{margin:0 0 4px}
         <video id="vL" muted loop playsinline preload="metadata"></video>
         <div class="right" id="right"><video id="vR" muted loop playsinline preload="metadata"></video></div>
         <div class="bar" id="bar"></div>
-        <span class="tag l" id="tagL">Baseline 1 · xx.xx dB</span>
-        <span class="tag r" id="tagR">Ours · xx.xx dB</span>
+        <span class="tag l" id="tagL">HAC++ · 33.14 dB · 11.21 MB</span>
+        <span class="tag r" id="tagR">+ Ours · 34.10 dB · 11.29 MB</span>
       </div>
-      <p class="hint">Videos load from <code>static/videos/&lt;scene&gt;_&lt;method&gt;.mp4</code> and <code>&lt;scene&gt;_&lt;method&gt;_ours.mp4</code>.</p>
+      <p class="hint">PSNR is measured on the test views of each scene. Size is the full bitstream in MB.</p>
     </div>
   </div>
 
@@ -308,8 +308,11 @@ const DRAFT = true;
   });
 
   /* Comparison: two synced videos with a draggable split. */
-  const NAMES={m1:'Baseline 1',m2:'Baseline 2',m3:'Baseline 3'};
-  const state={codec:'m1',scene:'scene1'};
+  const NAMES={hacpp:'HAC++',hac:'HAC',pcgs:'PCGS'};
+  /* [base PSNR, base MB, ours PSNR, ours MB], high rate (PCGS: highest level) */
+  const STATS={"hacpp": {"bonsai": [33.14, 11.21, 34.1, 11.29], "kitchen": [31.74, 11.45, 32.48, 11.69], "train": [22.51, 8.92, 23.03, 9.39], "playroom": [30.72, 5.45, 31.26, 5.48]}, "hac": {"bonsai": [33.1, 14.93, 33.94, 14.77], "kitchen": [31.8, 14.16, 32.46, 13.92], "train": [22.72, 11.31, 23.24, 11.51], "playroom": [30.86, 6.13, 31.23, 6.04]}, "pcgs": {"bonsai": [33.08, 16.58, 33.92, 16.63], "kitchen": [31.71, 16.1, 32.29, 16.21], "train": [22.41, 8.89, 22.97, 8.72], "playroom": [30.84, 4.9, 31.02, 4.79]}};
+  const f2=x=>Number(x).toFixed(2);
+  const state={codec:'hacpp',scene:'bonsai'};
   const vL=$('vL'),vR=$('vR'),cmp=$('cmp'),right=$('right'),bar=$('bar');
   let ok={L:false,R:false};
   function load(){
@@ -317,8 +320,9 @@ const DRAFT = true;
     ok={L:false,R:false};
     vL.hidden=vR.hidden=true; $('splitPh').hidden=false;
     $('phL').textContent=`${b}.mp4`; $('phR').textContent=`${b}_ours.mp4`;
-    $('tagL').textContent=`${NAMES[state.codec]} · xx.xx dB`;
-    $('tagR').textContent=`Ours · xx.xx dB`;
+    const st=(STATS[state.codec]||{})[state.scene];
+    $('tagL').textContent=st?`${NAMES[state.codec]} · ${f2(st[0])} dB · ${f2(st[1])} MB`:NAMES[state.codec];
+    $('tagR').textContent=st?`+ Ours · ${f2(st[2])} dB · ${f2(st[3])} MB`:'+ Ours';
     vL.src=`${b}.mp4`; vR.src=`${b}_ours.mp4`;
   }
   function ready(side){ok[side]=true; if(ok.L&&ok.R){vL.hidden=vR.hidden=false;$('splitPh').hidden=true;vL.currentTime=0;vR.currentTime=0;vL.play().catch(()=>{});vR.play().catch(()=>{});}}

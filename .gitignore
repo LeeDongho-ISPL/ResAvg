@@ -6,3 +6,6 @@ data/
 *.ply
 *.pth
 .DS_Store
+
+# raw renders and render scripts (kept local, not published)
+video/
