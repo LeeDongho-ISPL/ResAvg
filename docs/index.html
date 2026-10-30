@@ -102,9 +102,11 @@ figure{margin:0}
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:52px 56px;margin-top:56px}
 .band h2{font-size:28px;font-weight:700;text-align:center;margin-bottom:8px}
 .band .sub{text-align:center;color:var(--muted);margin:0 auto 22px;max-width:40em}
-.tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-bottom:10px}
-.tabs .lbl{font-family:var(--f-display);font-size:13px;font-weight:600;color:var(--muted);align-self:center;margin-right:4px;min-width:56px;text-align:right}
-.tabs button{font-family:var(--f-display);font-size:14px;font-weight:600;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+.tabgrid{display:grid;grid-template-columns:max-content minmax(0,max-content);justify-content:center;align-items:center;gap:10px 14px;margin-bottom:6px}
+.tabs{display:contents}
+.tabs .opts{display:flex;flex-wrap:wrap;gap:8px}
+.tabs .lbl{font-family:var(--f-display);font-size:13px;font-weight:600;color:var(--muted);text-align:right}
+.tabs button{font-family:var(--f-display);font-size:14px;font-weight:600;padding:6px 14px;width:112px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
 .tabs button[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
 .cmp{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:10px;overflow:hidden;background:var(--slot);touch-action:none;user-select:none;cursor:ew-resize;margin-top:14px}
 .cmp video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -129,7 +131,10 @@ footer p{margin:0 0 4px}
 
 @media (max-width:760px){
   .modules,.pair{grid-template-columns:minmax(0,1fr)}
-  .tabs .lbl{min-width:0;width:100%;text-align:center}
+  .tabgrid{grid-template-columns:minmax(0,1fr)}
+  .tabs .lbl{text-align:center}
+  .tabs .opts{justify-content:center}
+  .tabs button{width:auto}
   .vslot,.cmp{aspect-ratio:4/3}
   .islot.full{height:auto;aspect-ratio:16/10}
 }
@@ -226,18 +231,24 @@ footer p{margin:0 0 4px}
     <div class="wide">
       <h2>Visual Comparisons</h2>
       <p class="sub">Drag the divider. Left is the baseline, right is the proposed method.</p>
+      <div class="tabgrid">
       <div class="tabs" id="codecTabs" role="group" aria-label="Method">
         <span class="lbl">Method</span>
-        <button type="button" data-v="m1" aria-pressed="true">Baseline 1</button>
-        <button type="button" data-v="m2" aria-pressed="false">Baseline 2</button>
-        <button type="button" data-v="m3" aria-pressed="false">Baseline 3</button>
+        <div class="opts">
+          <button type="button" data-v="m1" aria-pressed="true">Baseline 1</button>
+          <button type="button" data-v="m2" aria-pressed="false">Baseline 2</button>
+          <button type="button" data-v="m3" aria-pressed="false">Baseline 3</button>
+        </div>
       </div>
       <div class="tabs" id="sceneTabs" role="group" aria-label="Scene">
         <span class="lbl">Scene</span>
-        <button type="button" data-v="scene1" aria-pressed="true">Scene 1</button>
-        <button type="button" data-v="scene2" aria-pressed="false">Scene 2</button>
-        <button type="button" data-v="scene3" aria-pressed="false">Scene 3</button>
-        <button type="button" data-v="scene4" aria-pressed="false">Scene 4</button>
+        <div class="opts">
+          <button type="button" data-v="scene1" aria-pressed="true">Scene 1</button>
+          <button type="button" data-v="scene2" aria-pressed="false">Scene 2</button>
+          <button type="button" data-v="scene3" aria-pressed="false">Scene 3</button>
+          <button type="button" data-v="scene4" aria-pressed="false">Scene 4</button>
+        </div>
+      </div>
       </div>
       <div class="cmp" id="cmp" tabindex="0" aria-label="Comparison video, use left and right arrow keys to move the divider">
         <div class="split-ph" id="splitPh"><div id="phL"></div><div id="phR"></div></div>
