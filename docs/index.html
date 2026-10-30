@@ -131,16 +131,18 @@ figure{margin:0}
 .vtime{font-family:var(--f-mono);font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;flex:none}
 .zoom{margin-top:40px}
 .zoom h3{font-size:20px;font-weight:700;text-align:center;margin-bottom:6px}
-.zoomgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+.zoomgrid{display:flex;flex-wrap:wrap;justify-content:center;gap:20px 16px;margin-top:16px}
+.zoomgrid figure{flex:0 0 calc((100% - 32px) / 3)}
 .zoomgrid figure{margin:0;min-width:0}
-.zcmp{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:8px;overflow:hidden;background:var(--slot);touch-action:none;user-select:none;cursor:ew-resize}
+.zcmp{position:relative;aspect-ratio:3/2;max-width:100%;border-radius:8px;overflow:hidden;background:var(--slot);touch-action:none;user-select:none;cursor:ew-resize}
 .zcmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:none;pointer-events:none}
 .zcmp .right{position:absolute;inset:0;clip-path:inset(0 0 0 50%)}
 .zcmp .bar{position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.08);pointer-events:none}
 .zcmp .bar::after{content:"⟷";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;background:#fff;color:var(--navy);display:grid;place-items:center;font-size:13px;box-shadow:0 1px 6px rgba(0,0,0,.2)}
 .zcmp .tag{position:absolute;bottom:8px;font-family:var(--f-display);font-size:12px;font-weight:600;padding:2px 8px;border-radius:5px;background:rgba(255,255,255,.92);color:var(--ink)}
 .zcmp .tag.l{left:8px}.zcmp .tag.r{right:8px;color:var(--ours)}
-.zoomgrid figcaption{text-align:center;font-size:14px;color:var(--muted);margin-top:8px}
+.zoomgrid figcaption{display:flex;align-items:center;gap:10px;font-size:13.5px;line-height:1.45;color:var(--muted);margin-top:8px}
+.zoomgrid .zctx{width:88px;flex:none;border-radius:4px;border:1px solid var(--line)}
 .zoomgrid figcaption b{color:var(--ink);font-family:var(--f-display)}
 
 /* BibTeX */
@@ -151,7 +153,7 @@ footer{margin-top:64px;border-top:1px solid var(--line);padding-block:24px 40px;
 footer p{margin:0 0 4px}
 
 @media (max-width:760px){
-  .zoomgrid{grid-template-columns:minmax(0,1fr)}
+  .zoomgrid figure{flex-basis:100%}
   .modules,.pair{grid-template-columns:minmax(0,1fr)}
   .tabgrid{grid-template-columns:minmax(0,1fr)}
   .tabs .lbl{text-align:center}
@@ -203,7 +205,7 @@ footer p{margin:0 0 4px}
       <div class="ph"><div><div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><b>Teaser video</b><code>static/videos/teaser.mp4</code><br>1280×638 · muted loop</div></div>
     </div>
     <div class="vctrl" id="teaserCtrl" hidden><button type="button" class="vplay" aria-label="Pause"></button><input type="range" class="vseek" min="0" max="1000" step="1" value="0" aria-label="Seek"><span class="vtime">0:00 / 0:00</span></div>
-    <figcaption>Center crop of the <i>bonsai</i> fly-through at the high rate. Left: HAC++. Right: HAC++ with ResAvg.</figcaption>
+    <figcaption>Center crop of the <i>bonsai</i> fly-through (seconds 5 to 10) at the high rate. Left: HAC++. Right: HAC++ with ResAvg.</figcaption>
   </figure>
 </div>
 
@@ -269,7 +271,10 @@ footer p{margin:0 0 4px}
         <div class="opts">
           <button type="button" data-v="bonsai" aria-pressed="true">bonsai</button>
           <button type="button" data-v="kitchen" aria-pressed="false">kitchen</button>
+          <button type="button" data-v="counter" aria-pressed="false">counter</button>
+          <button type="button" data-v="room" aria-pressed="false">room</button>
           <button type="button" data-v="train" aria-pressed="false">train</button>
+          <button type="button" data-v="drjohnson" aria-pressed="false">drjohnson</button>
         </div>
       </div>
       <div class="tabs" id="speedTabs" role="group" aria-label="Playback speed">
@@ -293,11 +298,13 @@ footer p{margin:0 0 4px}
       <p class="hint">PSNR is measured on the test views of each scene. Size is the full bitstream in MB. <i>train</i> plays at half the selected speed because its camera moves about twice as far per frame. Press Space on the video to pause.</p>
       <div class="zoom">
         <h3>Zoom-in comparison</h3>
-        <p class="sub">Test views with ground truth, cropped around the region where all six codecs gain the most with ResAvg. PSNR is computed on each crop against the ground truth.</p>
+        <p class="sub">Test views with ground truth. Each crop is the region where all six codecs gain the most with ResAvg, and the thumbnail shows where it sits in the view. PSNR is computed on the crop against the ground truth.</p>
         <div class="zoomgrid" id="zoomgrid">
-          <figure><div class="zcmp" data-scene="bonsai" tabindex="0" aria-label="bonsai zoom comparison"></div><figcaption><b>bonsai</b> · test view 16</figcaption></figure>
-          <figure><div class="zcmp" data-scene="kitchen" tabindex="0" aria-label="kitchen zoom comparison"></div><figcaption><b>kitchen</b> · test view 4</figcaption></figure>
-          <figure><div class="zcmp" data-scene="train" tabindex="0" aria-label="train zoom comparison"></div><figcaption><b>train</b> · test view 27</figcaption></figure>
+          <figure><div class="zcmp" data-scene="bonsai" tabindex="0" aria-label="bonsai zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/bonsai_context.jpg" alt="Full test view with the cropped region boxed"><span><b>bonsai</b> · glossy tray rim<br>test view 16</span></figcaption></figure>
+          <figure><div class="zcmp" data-scene="room" tabindex="0" aria-label="room zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/room_context.jpg" alt="Full test view with the cropped region boxed"><span><b>room</b> · curtain sheen<br>test view 19</span></figcaption></figure>
+          <figure><div class="zcmp" data-scene="counter" tabindex="0" aria-label="counter zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/counter_context.jpg" alt="Full test view with the cropped region boxed"><span><b>counter</b> · metal baking tray<br>test view 16</span></figcaption></figure>
+          <figure><div class="zcmp" data-scene="drjohnson" tabindex="0" aria-label="drjohnson zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/drjohnson_context.jpg" alt="Full test view with the cropped region boxed"><span><b>drjohnson</b> · lit door panel<br>test view 8</span></figcaption></figure>
+          <figure><div class="zcmp" data-scene="train" tabindex="0" aria-label="train zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/train_context.jpg" alt="Full test view with the cropped region boxed"><span><b>train</b> · sunlit background<br>test view 27</span></figcaption></figure>
         </div>
       </div>
     </div>
@@ -379,7 +386,7 @@ const SCENE_RATE = {train: 0.5};
   /* Comparison: two synced videos with a draggable split. */
   const NAMES={hacpp:'HAC++',hac:'HAC',pcgs:'PCGS'};
   /* [base PSNR, base MB, ours PSNR, ours MB], high rate (PCGS: highest level) */
-  const STATS={"hacpp": {"bonsai": [33.14, 11.21, 34.1, 11.29], "kitchen": [31.74, 11.45, 32.48, 11.69], "train": [22.51, 8.92, 23.03, 9.39]}, "hac": {"bonsai": [33.1, 14.93, 33.94, 14.77], "kitchen": [31.8, 14.16, 32.46, 13.92], "train": [22.72, 11.31, 23.24, 11.51]}, "pcgs": {"bonsai": [33.08, 16.58, 33.92, 16.63], "kitchen": [31.71, 16.1, 32.29, 16.21], "train": [22.41, 8.89, 22.97, 8.72]}};
+  const STATS={"hacpp": {"bonsai": [33.14, 11.21, 34.1, 11.29], "kitchen": [31.74, 11.45, 32.48, 11.69], "train": [22.51, 8.92, 23.03, 9.39], "counter": [29.78, 9.67, 30.35, 9.82], "room": [32.14, 7.45, 32.52, 7.44], "drjohnson": [29.79, 7.85, 30.21, 8.12]}, "hac": {"bonsai": [33.1, 14.93, 33.94, 14.77], "kitchen": [31.8, 14.16, 32.46, 13.92], "train": [22.72, 11.31, 23.24, 11.51], "counter": [29.76, 12.05, 30.2, 11.96], "room": [32.04, 9.12, 32.51, 9.23], "drjohnson": [29.67, 9.16, 30.02, 9.1]}, "pcgs": {"bonsai": [33.08, 16.58, 33.92, 16.63], "kitchen": [31.71, 16.1, 32.29, 16.21], "train": [22.41, 8.89, 22.97, 8.72], "counter": [29.67, 13.65, 29.91, 13.72], "room": [32.25, 10.96, 32.5, 10.82], "drjohnson": [29.73, 6.92, 30.09, 6.98]}};
   const f2=x=>Number(x).toFixed(2);
   const state={codec:'hacpp',scene:'bonsai'};
   const vL=$('vL'),vR=$('vR'),cmp=$('cmp'),right=$('right'),bar=$('bar');
@@ -398,7 +405,7 @@ const SCENE_RATE = {train: 0.5};
     return {el,iL,iR,tag:el.querySelector('.tag.l'),tagR:el.querySelector('.tag.r')};
   });
   /* crop PSNR against ground truth: [base, ours] */
-  const ZPSNR={"bonsai":{"hacpp":[26.82,29.77],"hac":[26.85,29.45],"pcgs":[26.48,29.65]},"kitchen":{"hacpp":[33.43,35.17],"hac":[33.1,35.48],"pcgs":[33.11,35.37]},"train":{"hacpp":[21.73,23.28],"hac":[22.18,24.7],"pcgs":[22.8,24.15]}};
+  const ZPSNR={"bonsai": {"hacpp": [23.2, 26.85], "hac": [23.3, 26.48], "pcgs": [22.8, 26.78]}, "room": {"hacpp": [34.07, 38.34], "hac": [33.52, 36.25], "pcgs": [33.72, 36.86]}, "counter": {"hacpp": [27.66, 30.08], "hac": [27.81, 30.28], "pcgs": [27.68, 29.87]}, "drjohnson": {"hacpp": [33.73, 35.64], "hac": [33.54, 35.06], "pcgs": [33.05, 34.47]}, "train": {"hacpp": [22.86, 24.42], "hac": [21.78, 24.77], "pcgs": [21.14, 23.49]}};
   function updateZoom(){
     zooms.forEach(z=>{const sc=z.el.dataset.scene,b=`static/images/zoom/${sc}_${state.codec}`,q=(ZPSNR[sc]||{})[state.codec];z.iL.src=`${b}.jpg`;z.iR.src=`${b}_ours.jpg`;z.tag.textContent=q?`${NAMES[state.codec]} · ${q[0].toFixed(2)} dB`:NAMES[state.codec];z.tagR.textContent=q?`+ Ours · ${q[1].toFixed(2)} dB`:'+ Ours';});
   }
