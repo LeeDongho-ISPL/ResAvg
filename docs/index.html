@@ -351,7 +351,7 @@ const SCENE_RATE = {train: 0.5};
       if(!scrub&&m.duration) seek.value=Math.round(m.currentTime/m.duration*1000);
       tm.textContent=`${fmt(m.currentTime)} / ${fmt(m.duration)}`;
     };
-    btn.addEventListener('click',()=>{ if(m.paused) vids.forEach(v=>v.play().catch(()=>{})); else vids.forEach(v=>v.pause()); });
+    btn.addEventListener('click',()=>{ if(m.paused){ctrl.dataset.user='play';vids.forEach(v=>v.play().catch(()=>{}));} else {ctrl.dataset.user='paused';vids.forEach(v=>v.pause());} });
     seek.addEventListener('input',()=>{
       if(!scrub){scrub=true;resume=!m.paused;vids.forEach(v=>v.pause());}
       if(m.duration){const t=seek.value/1000*m.duration;vids.forEach(v=>{v.currentTime=t;});}
@@ -408,7 +408,7 @@ const SCENE_RATE = {train: 0.5};
     vL.src=`${b}.mp4`; vR.src=`${b}_ours.mp4`;
   }
   function setCmpRate(){const r=SPEED*(SCENE_RATE[state.scene]||1);[vL,vR].forEach(x=>{x.defaultPlaybackRate=r;x.playbackRate=r;});}
-  function ready(side){ok[side]=true; if(ok.L&&ok.R){vL.hidden=vR.hidden=false;$('splitPh').hidden=true;vL.currentTime=0;vR.currentTime=0;setCmpRate();vL.play().catch(()=>{});vR.play().catch(()=>{});}}
+  function ready(side){ok[side]=true; if(ok.L&&ok.R){vL.hidden=vR.hidden=false;$('splitPh').hidden=true;vL.currentTime=0;vR.currentTime=0;setCmpRate();if($('cmpCtrl').dataset.user!=='paused'){vL.play().catch(()=>{});vR.play().catch(()=>{});}}}
   vL.addEventListener('loadeddata',()=>ready('L')); vR.addEventListener('loadeddata',()=>ready('R'));
   vL.addEventListener('timeupdate',()=>{if(!vL.paused&&Math.abs(vR.currentTime-vL.currentTime)>0.08) vR.currentTime=vL.currentTime;});
   attachCtrl($('cmpCtrl'),[vL,vR]);
