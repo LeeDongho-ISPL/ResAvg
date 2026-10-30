@@ -59,7 +59,9 @@ header{text-align:center;padding-block:56px 28px}
 
 /* Video slot (placeholder until the file exists) */
 .vslot{position:relative;aspect-ratio:16/9;max-width:100%;background:var(--slot);border-radius:10px;overflow:hidden}
-.vslot.pair{aspect-ratio:1280/638}
+.vslot.pair{aspect-ratio:1280/636}
+.pairlab{display:grid;grid-template-columns:600fr 8fr 600fr;margin:0 0 6px;font-family:var(--f-display);font-size:15px;font-weight:600;text-align:center;color:var(--ink)}
+.pairlab span:last-child{grid-column:3;color:var(--ours)}
 .vslot .vlab{position:absolute;top:10px;z-index:2;font-family:var(--f-display);font-size:13px;font-weight:600;padding:3px 10px;border-radius:6px;background:rgba(255,255,255,.92);color:var(--ink)}
 .vslot .vlab.l{left:10px}.vslot .vlab.r{left:calc(50% + 10px);color:var(--ours)}
 .vslot video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
@@ -136,10 +138,13 @@ figure{margin:0}
 .zoomgrid figure{margin:0;min-width:0}
 .zcmp{position:relative;aspect-ratio:3/2;max-width:100%;border-radius:8px;overflow:hidden;background:var(--slot);touch-action:none;user-select:none;cursor:ew-resize}
 .zcmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:none;pointer-events:none}
+.zcmp .rbox{position:absolute;border:2px solid #e00000;box-shadow:0 0 0 1px rgba(255,255,255,.55);pointer-events:none;z-index:1}
+.zcmp .bar{z-index:2}
 .zcmp .right{position:absolute;inset:0;clip-path:inset(0 0 0 50%)}
 .zcmp .bar{position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.08);pointer-events:none}
 .zcmp .bar::after{content:"⟷";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;background:#fff;color:var(--navy);display:grid;place-items:center;font-size:13px;box-shadow:0 1px 6px rgba(0,0,0,.2)}
 .zcmp .tag{position:absolute;bottom:8px;font-family:var(--f-display);font-size:12px;font-weight:600;padding:2px 8px;border-radius:5px;background:rgba(255,255,255,.92);color:var(--ink)}
+.zcmp.tagtop .tag{bottom:auto;top:8px}
 .zcmp .tag.l{left:8px}.zcmp .tag.r{right:8px;color:var(--ours)}
 .zoomgrid figcaption{display:flex;align-items:center;gap:10px;font-size:13.5px;line-height:1.45;color:var(--muted);margin-top:8px}
 .zoomgrid .zctx{width:88px;flex:none;border-radius:4px;border:1px solid var(--line)}
@@ -200,9 +205,9 @@ footer p{margin:0 0 4px}
 
 <div class="wide teaser">
   <figure>
+    <div class="pairlab"><span>HAC++</span><span>HAC++ + Ours</span></div>
     <div class="vslot pair" data-src="static/videos/teaser.mp4">
-      <span class="vlab l">HAC++</span><span class="vlab r">HAC++ + Ours</span>
-      <div class="ph"><div><div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><b>Teaser video</b><code>static/videos/teaser.mp4</code><br>1280×638 · muted loop</div></div>
+      <div class="ph"><div><div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><b>Teaser video</b><code>static/videos/teaser.mp4</code><br>1280×636 · muted loop</div></div>
     </div>
     <div class="vctrl" id="teaserCtrl" hidden><button type="button" class="vplay" aria-label="Pause"></button><input type="range" class="vseek" min="0" max="1000" step="1" value="0" aria-label="Seek"><span class="vtime">0:00 / 0:00</span></div>
     <figcaption>Center crop of the <i>bonsai</i> fly-through (seconds 5 to 10) at the high rate. Left: HAC++. Right: HAC++ with ResAvg.</figcaption>
@@ -298,13 +303,13 @@ footer p{margin:0 0 4px}
       <p class="hint">PSNR is measured on the test views of each scene. Size is the full bitstream in MB. <i>train</i> plays at half the selected speed because its camera moves about twice as far per frame. Press Space on the video to pause.</p>
       <div class="zoom">
         <h3>Zoom-in comparison</h3>
-        <p class="sub">Test views with ground truth. Each crop is the region where all six codecs gain the most with ResAvg, and the thumbnail shows where it sits in the view. PSNR is computed on the crop against the ground truth.</p>
+        <p class="sub">Test views with ground truth. Each crop is the region where all six codecs gain the most with ResAvg, the thumbnail shows where it sits in the view, and the red box marks the window where all three codecs gain the most. PSNR is computed on the crop against the ground truth.</p>
         <div class="zoomgrid" id="zoomgrid">
           <figure><div class="zcmp" data-scene="bonsai" tabindex="0" aria-label="bonsai zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/bonsai_context.jpg" alt="Full test view with the cropped region boxed"><span><b>bonsai</b> · glossy tray rim<br>test view 16</span></figcaption></figure>
           <figure><div class="zcmp" data-scene="room" tabindex="0" aria-label="room zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/room_context.jpg" alt="Full test view with the cropped region boxed"><span><b>room</b> · curtain sheen<br>test view 19</span></figcaption></figure>
-          <figure><div class="zcmp" data-scene="counter" tabindex="0" aria-label="counter zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/counter_context.jpg" alt="Full test view with the cropped region boxed"><span><b>counter</b> · metal baking tray<br>test view 16</span></figcaption></figure>
-          <figure><div class="zcmp" data-scene="drjohnson" tabindex="0" aria-label="drjohnson zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/drjohnson_context.jpg" alt="Full test view with the cropped region boxed"><span><b>drjohnson</b> · lit door panel<br>test view 8</span></figcaption></figure>
-          <figure><div class="zcmp" data-scene="train" tabindex="0" aria-label="train zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/train_context.jpg" alt="Full test view with the cropped region boxed"><span><b>train</b> · sunlit background<br>test view 27</span></figcaption></figure>
+          <figure><div class="zcmp" data-scene="counter" tabindex="0" aria-label="counter zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/counter_context.jpg" alt="Full test view with the cropped region boxed"><span><b>counter</b> · metal tray rim<br>test view 16</span></figcaption></figure>
+          <figure><div class="zcmp" data-scene="drjohnson" tabindex="0" aria-label="drjohnson zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/drjohnson_context.jpg" alt="Full test view with the cropped region boxed"><span><b>drjohnson</b> · hook shadow on a lit door<br>test view 8</span></figcaption></figure>
+          <figure><div class="zcmp" data-scene="train" tabindex="0" aria-label="train zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/train_context.jpg" alt="Full test view with the cropped region boxed"><span><b>train</b> · cab window glass<br>test view 27</span></figcaption></figure>
         </div>
       </div>
     </div>
@@ -391,9 +396,14 @@ const SCENE_RATE = {train: 0.5};
   const state={codec:'hacpp',scene:'bonsai'};
   const vL=$('vL'),vR=$('vR'),cmp=$('cmp'),right=$('right'),bar=$('bar');
   let ok={L:false,R:false};
+  /* red box inside each crop: [x%, y%, w%, h%, cropW, cropH]; the window where every codec gains most */
+  const ZBOX={"bonsai":[40.53,40.91,25.95,26.14,528,352],"room":[51.89,56.25,25.95,26.14,528,352],"counter":[73.67,55.11,25.95,26.14,528,352],"drjohnson":[25.91,0.35,25.91,26.04,440,288],"train":[44.69,71.59,25.94,26.14,320,176]};
   /* Zoom sliders: one per scene, images follow the selected method. */
   const zooms=[...document.querySelectorAll('.zcmp')].map(el=>{
-    el.innerHTML='<img alt=""><div class="right"><img alt=""></div><div class="bar"></div><span class="tag l"></span><span class="tag r">+ Ours</span>';
+    const bx=ZBOX[el.dataset.scene];
+    el.style.aspectRatio=`${bx[4]}/${bx[5]}`;
+    if(bx[1]+bx[3]>70) el.classList.add('tagtop');
+    el.innerHTML=`<img alt=""><div class="right"><img alt=""></div><div class="rbox" style="left:${bx[0]}%;top:${bx[1]}%;width:${bx[2]}%;height:${bx[3]}%"></div><div class="bar"></div><span class="tag l"></span><span class="tag r">+ Ours</span>`;
     const [iL,iR]=el.querySelectorAll('img'), rt=el.querySelector('.right'), br=el.querySelector('.bar');
     let zt=.5, dz=false;
     const set=v=>{zt=Math.min(.98,Math.max(.02,v));rt.style.clipPath=`inset(0 0 0 ${zt*100}%)`;br.style.left=`${zt*100}%`;};
