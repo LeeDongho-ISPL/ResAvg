@@ -206,7 +206,7 @@ footer p{margin:0 0 4px}
 <div class="wide teaser">
   <figure>
     <div class="pairlab"><span>HAC++</span><span>HAC++ + Ours</span></div>
-    <div class="vslot pair" data-src="static/videos/teaser.mp4">
+    <div class="vslot pair" data-src="static/videos/teaser.mp4?v=20261031b">
       <div class="ph"><div><div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><b>Teaser video</b><code>static/videos/teaser.mp4</code><br>1280×636 · muted loop</div></div>
     </div>
     <div class="vctrl" id="teaserCtrl" hidden><button type="button" class="vplay" aria-label="Pause"></button><input type="range" class="vseek" min="0" max="1000" step="1" value="0" aria-label="Seek"><span class="vtime">0:00 / 0:00</span></div>
@@ -305,11 +305,11 @@ footer p{margin:0 0 4px}
         <h3>Zoom-in comparison</h3>
         <p class="sub">Test views with ground truth. Each crop is the region where all six codecs gain the most with ResAvg, the thumbnail shows where it sits in the view, and the red box marks the window where all three codecs gain the most. PSNR is computed on the crop against the ground truth.</p>
         <div class="zoomgrid" id="zoomgrid">
-          <figure><div class="zcmp" data-scene="bonsai" tabindex="0" aria-label="bonsai zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/bonsai_context.jpg" alt="Full test view with the cropped region boxed"><span><b>bonsai</b> · glossy tray rim<br>test view 16</span></figcaption></figure>
-          <figure><div class="zcmp" data-scene="room" tabindex="0" aria-label="room zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/room_context.jpg" alt="Full test view with the cropped region boxed"><span><b>room</b> · curtain sheen<br>test view 19</span></figcaption></figure>
-          <figure><div class="zcmp" data-scene="counter" tabindex="0" aria-label="counter zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/counter_context.jpg" alt="Full test view with the cropped region boxed"><span><b>counter</b> · metal tray rim<br>test view 16</span></figcaption></figure>
-          <figure><div class="zcmp" data-scene="drjohnson" tabindex="0" aria-label="drjohnson zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/drjohnson_context.jpg" alt="Full test view with the cropped region boxed"><span><b>drjohnson</b> · hook shadow on a lit door<br>test view 8</span></figcaption></figure>
-          <figure><div class="zcmp" data-scene="train" tabindex="0" aria-label="train zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/train_context.jpg" alt="Full test view with the cropped region boxed"><span><b>train</b> · cab window glass<br>test view 27</span></figcaption></figure>
+          <figure><div class="zcmp" data-scene="bonsai" tabindex="0" aria-label="bonsai zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/bonsai_context.jpg?v=20261031b" alt="Full test view with the cropped region boxed"><span><b>bonsai</b> · glossy tray rim<br>test view 16</span></figcaption></figure>
+          <figure><div class="zcmp" data-scene="room" tabindex="0" aria-label="room zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/room_context.jpg?v=20261031b" alt="Full test view with the cropped region boxed"><span><b>room</b> · curtain sheen<br>test view 19</span></figcaption></figure>
+          <figure><div class="zcmp" data-scene="counter" tabindex="0" aria-label="counter zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/counter_context.jpg?v=20261031b" alt="Full test view with the cropped region boxed"><span><b>counter</b> · metal tray rim<br>test view 16</span></figcaption></figure>
+          <figure><div class="zcmp" data-scene="drjohnson" tabindex="0" aria-label="drjohnson zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/drjohnson_context.jpg?v=20261031b" alt="Full test view with the cropped region boxed"><span><b>drjohnson</b> · hook shadow on a lit door<br>test view 8</span></figcaption></figure>
+          <figure><div class="zcmp" data-scene="train" tabindex="0" aria-label="train zoom comparison"></div><figcaption><img class="zctx" src="static/images/zoom/train_context.jpg?v=20261031b" alt="Full test view with the cropped region boxed"><span><b>train</b> · cab window glass<br>test view 27</span></figcaption></figure>
         </div>
       </div>
     </div>
@@ -396,6 +396,8 @@ const SCENE_RATE = {train: 0.5};
   const state={codec:'hacpp',scene:'bonsai'};
   const vL=$('vL'),vR=$('vR'),cmp=$('cmp'),right=$('right'),bar=$('bar');
   let ok={L:false,R:false};
+  /* asset version: bump when a video or image is replaced under the same name, so browsers drop the cached copy */
+  const AV='20261031b';
   /* red box inside each crop: [x%, y%, w%, h%, cropW, cropH]; the window where every codec gains most */
   const ZBOX={"bonsai":[40.53,40.91,25.95,26.14,528,352],"room":[51.89,56.25,25.95,26.14,528,352],"counter":[73.67,55.11,25.95,26.14,528,352],"drjohnson":[25.91,0.35,25.91,26.04,440,288],"train":[44.69,71.59,25.94,26.14,320,176]};
   /* Zoom sliders: one per scene, images follow the selected method. */
@@ -417,7 +419,7 @@ const SCENE_RATE = {train: 0.5};
   /* crop PSNR against ground truth: [base, ours] */
   const ZPSNR={"bonsai": {"hacpp": [23.2, 26.85], "hac": [23.3, 26.48], "pcgs": [22.8, 26.78]}, "room": {"hacpp": [34.07, 38.34], "hac": [33.52, 36.25], "pcgs": [33.72, 36.86]}, "counter": {"hacpp": [27.66, 30.08], "hac": [27.81, 30.28], "pcgs": [27.68, 29.87]}, "drjohnson": {"hacpp": [33.73, 35.64], "hac": [33.54, 35.06], "pcgs": [33.05, 34.47]}, "train": {"hacpp": [22.86, 24.42], "hac": [21.78, 24.77], "pcgs": [21.14, 23.49]}};
   function updateZoom(){
-    zooms.forEach(z=>{const sc=z.el.dataset.scene,b=`static/images/zoom/${sc}_${state.codec}`,q=(ZPSNR[sc]||{})[state.codec];z.iL.src=`${b}.jpg`;z.iR.src=`${b}_ours.jpg`;z.tag.textContent=q?`${NAMES[state.codec]} · ${q[0].toFixed(2)} dB`:NAMES[state.codec];z.tagR.textContent=q?`+ Ours · ${q[1].toFixed(2)} dB`:'+ Ours';});
+    zooms.forEach(z=>{const sc=z.el.dataset.scene,b=`static/images/zoom/${sc}_${state.codec}`,q=(ZPSNR[sc]||{})[state.codec];z.iL.src=`${b}.jpg?v=${AV}`;z.iR.src=`${b}_ours.jpg?v=${AV}`;z.tag.textContent=q?`${NAMES[state.codec]} · ${q[0].toFixed(2)} dB`:NAMES[state.codec];z.tagR.textContent=q?`+ Ours · ${q[1].toFixed(2)} dB`:'+ Ours';});
   }
   function load(){
     updateZoom();
@@ -428,7 +430,7 @@ const SCENE_RATE = {train: 0.5};
     const st=(STATS[state.codec]||{})[state.scene];
     $('tagL').textContent=st?`${NAMES[state.codec]} · ${f2(st[0])} dB · ${f2(st[1])} MB`:NAMES[state.codec];
     $('tagR').textContent=st?`+ Ours · ${f2(st[2])} dB · ${f2(st[3])} MB`:'+ Ours';
-    vL.src=`${b}.mp4`; vR.src=`${b}_ours.mp4`;
+    vL.src=`${b}.mp4?v=${AV}`; vR.src=`${b}_ours.mp4?v=${AV}`;
   }
   function setCmpRate(){const r=SPEED*(SCENE_RATE[state.scene]||1);[vL,vR].forEach(x=>{x.defaultPlaybackRate=r;x.playbackRate=r;});}
   function ready(side){ok[side]=true; if(ok.L&&ok.R){vL.hidden=vR.hidden=false;$('splitPh').hidden=true;vL.currentTime=0;vR.currentTime=0;setCmpRate();if($('cmpCtrl').dataset.user!=='paused'){vL.play().catch(()=>{});vR.play().catch(()=>{});}}}
